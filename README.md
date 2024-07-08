@@ -1,6 +1,6 @@
 # My Voice Board
 
-![My Voice Board Screenshot](screenshot.png)
+![My Voice Board Screenshot](screenshot.PNG)
 
 ## Description
 
