@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Voice Board</title>
+    <link rel="icon" type="image/png" href="extra-assets/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="extra-assets/apple-touch-icon.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E6F3FF;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo {
+            background-color: #4A90E2;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 5px solid #FFD700;
+            text-align: center;
+        }
+        .category {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .category-title {
+            background-color: #4A90E2;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: flex-start;
+        }
+        .button {
+            background-color: #FFFFFF;
+            border: 2px solid #4A90E2;
+            border-radius: 10px;
+            color: #333333;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 10px 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .button:hover, .button:focus {
+            background-color: #E6F3FF;
+            transform: scale(1.05);
+        }
+        .button:active {
+            background-color: #B8D8FF;
+            transform: scale(0.95);
+        }
+        .button img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+        .info-button {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .info-button:hover {
+            background-color: #3A7BC8;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .button {
+                width: 80px;
+                height: 80px;
+                font-size: 12px;
+            }
+            .button img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <h1>My Voice Board</h1>
+    </div>
+    <div id="communicationBoard"></div>
+
+    <script>
+        const categories = [
+            {
+                name: "Core Words",
+                symbols: ["I", "Me", "You", "Help", "More", "Stop", "Go", "Yes", "No", "Want", "Don't want", "Like", "Don't like"]
+            },
+            {
+                name: "Basic Needs",
+                symbols: ["Eat", "Drink", "Hungry", "Thirsty", "Bathroom", "Sleep", "Hurt", "Sick"]
+            },
+            {
+                name: "Emotions",
+                symbols: ["Happy", "Sad", "Angry", "Scared", "Excited", "Bored", "Confused", "Calm"]
+            },
+            {
+                name: "People",
+                symbols: ["Mom", "Dad", "Brother", "Sister", "Friend", "Teacher", "Doctor", "Helper"]
+            },
+            {
+                name: "Places",
+                symbols: ["Home", "School", "Outside", "Inside", "Park", "Hospital"]
+            },
+            {
+                name: "Transportation",
+                symbols: ["Car", "Bus", "Train", "Plane", "Bike", "Walk"]
+            },
+            {
+                name: "Activities",
+                symbols: ["Play", "Read", "Draw", "Sing", "Dance", "Run", "Jump", "Swim"]
+            },
+            {
+                name: "Tech Devices",
+                symbols: ["TV", "Computer", "Tablet", "Phone", "Game console", "Headphones"]
+            },
+            {
+                name: "Social Media",
+                symbols: ["Facebook", "Instagram", "TikTok", "YouTube", "Twitter", "Snapchat"]
+            },
+            {
+                name: "Stores",
+                symbols: ["Grocery store", "Toy store", "Clothes store", "Book store", "Pet store", "Pharmacy"]
+            },
+            {
+                name: "Food Brands",
+                symbols: ["McDonald's", "Pizza Hut", "Subway", "Burger King", "KFC", "Domino's"]
+            },
+            {
+                name: "Drink Brands",
+                symbols: ["Coca-Cola", "Pepsi", "Sprite", "Fanta", "Gatorade", "Juice"]
+            },
+            {
+                name: "Tech Brands",
+                symbols: ["Apple", "Google", "Microsoft", "Samsung", "Nintendo", "PlayStation"]
+            },
+            {
+                name: "Toy Brands",
+                symbols: ["LEGO", "Barbie", "Hot Wheels", "Nerf", "Play-Doh", "Nintendo"]
+            },
+            {
+                name: "Entertainment",
+                symbols: ["Movie", "Music", "Book", "Toy", "Game", "TV show", "Anime", "Cartoon", "Live Action"]
+            },
+            {
+                name: "Superhero Brands",
+                symbols: ["DC", "Superman", "Batman", "Marvel", "Avengers", "Spider-Man"]
+            },
+            {
+                name: "Genres",
+                symbols: ["Action", "Comedy", "Drama", "Sci-Fi", "Fantasy", "Horror", "Romance", "Adventure"]
+            },
+            {
+                name: "Time",
+                symbols: ["Morning", "Afternoon", "Night", "Today", "Tomorrow", "Later"]
+            },
+            {
+                name: "Weather",
+                symbols: ["Hot", "Cold", "Rainy", "Sunny", "Snowy", "Windy"]
+            },
+            {
+                name: "Descriptors",
+                symbols: ["Big", "Small", "Fast", "Slow", "Loud", "Quiet", "Good", "Bad"]
+            },
+            {
+                name: "Actions",
+                symbols: ["Open", "Close", "On", "Off", "Give", "Take", "Find", "Hide"]
+            },
+            {
+                name: "Tech Terms",
+                symbols: ["Internet", "WiFi", "Password", "Charge", "Update", "VR", "AI", "Game"]
+            }
+        ];
+
+        const board = document.getElementById('communicationBoard');
+
+        categories.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category';
+
+            const categoryTitle = document.createElement('div');
+            categoryTitle.className = 'category-title';
+            
+            const titleText = document.createElement('h2');
+            titleText.textContent = category.name;
+            
+            const infoButton = document.createElement('button');
+            infoButton.className = 'info-button tooltip';
+            infoButton.textContent = 'i';
+            infoButton.onclick = () => showInfoMessage();
+            
+            const tooltip = document.createElement('span');
+            tooltip.className = 'tooltiptext';
+            tooltip.textContent = 'Request new symbols on GitHub';
+            
+            infoButton.appendChild(tooltip);
+            categoryTitle.appendChild(titleText);
+            categoryTitle.appendChild(infoButton);
+            categoryDiv.appendChild(categoryTitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+
+            category.symbols.forEach(symbol => {
+                const button = createSymbolButton(symbol);
+                grid.appendChild(button);
+            });
+
+            categoryDiv.appendChild(grid);
+            board.appendChild(categoryDiv);
+        });
+
+        function createSymbolButton(symbol) {
+            const button = document.createElement('button');
+            button.className = 'button';
+            button.setAttribute('aria-label', `Speak ${symbol}`);
+            button.onclick = () => speak(symbol);
+
+            const img = document.createElement('img');
+            img.src = `symbol-images/${encodeURIComponent(symbol.toLowerCase().replace(/ /g, '-'))}.png`;
+            img.alt = symbol;
+
+            const text = document.createElement('span');
+            text.textContent = symbol;
+
+            button.appendChild(img);
+            button.appendChild(text);
+            return button;
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+
+        function showInfoMessage() {
+            alert("To request new symbols or features, please create an issue on GitHub: https://github.com/f47e/my-voice-board/issues");
+        }
+    </script>
+</body>
+</html>
